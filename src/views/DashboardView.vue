@@ -1,11 +1,27 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onBeforeUnmount, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { CalendarPlus, ArrowUpRight, DoorOpen, UsersRound, Coins, Activity, Clock3, MapPin, CarFront, Coffee, Leaf, AlertTriangle, ChevronRight } from '@lucide/vue'
 import { useAppStore } from '../stores/app'
+import { useAuthStore } from '../stores/auth'
 
 const store = useAppStore()
+const auth = useAuthStore()
 const router = useRouter()
+const now = ref(new Date())
+const clockTimer = window.setInterval(() => { now.value = new Date() }, 60_000)
+
+onBeforeUnmount(() => window.clearInterval(clockTimer))
+
+const greetingName = computed(() => auth.user?.greetingName ?? auth.user?.name ?? '사용자')
+const timeGreeting = computed(() => {
+  const hour = now.value.getHours()
+  if (hour >= 5 && hour < 11) return '좋은 아침이에요'
+  if (hour >= 11 && hour < 14) return '즐거운 점심이에요'
+  if (hour >= 14 && hour < 18) return '좋은 오후예요'
+  if (hour >= 18 && hour < 22) return '좋은 저녁이에요'
+  return '편안한 밤이에요'
+})
 const currentDept = computed(() => store.departments.find((item) => item.name === store.currentUser.department))
 const resourceMap = computed(() => Object.fromEntries(store.resources.map((item) => [item.id, item])))
 const typeIcon = { meeting: DoorOpen, vehicle: CarFront, refresh: Leaf, parking: MapPin, food: Coffee }
@@ -18,7 +34,7 @@ const days = ['월', '화', '수', '목', '금', '토', '일']
     <section class="relative overflow-hidden rounded-[1rem] bg-[#123d2f] px-6 py-7 text-white shadow-[0_22px_50px_rgba(18,61,47,.16)] sm:px-9 sm:py-9">
       <div class="absolute -right-20 -top-32 size-80 rounded-full border-[52px] border-white/[.035]"></div><div class="absolute -bottom-36 right-40 size-72 rounded-full border-[1px] border-white/10"></div>
       <div class="relative flex flex-col justify-between gap-8 xl:flex-row xl:items-end">
-        <div><p class="text-[11px] font-bold tracking-[.2em] text-[#b9d4c4]">MONDAY · OCTOBER 20</p><h2 class="mt-4 max-w-xl text-3xl font-medium leading-tight tracking-[-.04em] sm:text-[2.6rem]">좋은 저녁이에요, 민준님.<br><span class="text-white/55">오늘의 공간이 잘 흐르고 있어요.</span></h2><p class="mt-4 text-sm text-white/50">회의 2건과 방문객 1명이 예정되어 있습니다.</p></div>
+        <div><p class="text-[11px] font-bold tracking-[.2em] text-[#b9d4c4]">MONDAY · OCTOBER 20</p><h2 class="mt-4 max-w-3xl text-3xl font-medium leading-tight tracking-[-.04em] sm:text-[2.6rem]">{{ timeGreeting }}, {{ greetingName }}님.<br><span class="text-white/55">오늘도 성수 신사옥은 쾌적하고 조용하게 잘 관리되고 있습니다.</span></h2><p class="mt-4 text-sm text-white/50">회의 2건과 방문객 1명이 예정되어 있습니다.</p></div>
         <div class="flex flex-wrap gap-3"><button class="inline-flex items-center gap-2 rounded-xl bg-white px-4 py-3 text-sm font-semibold text-forest transition hover:bg-[#e7f0ea]" @click="router.push('/booking')"><CalendarPlus :size="17" /> 새 예약</button><button class="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/8 px-4 py-3 text-sm font-semibold text-white transition hover:bg-white/12" @click="router.push('/visitors')"><UsersRound :size="17" /> 방문객 초대</button></div>
       </div>
     </section>

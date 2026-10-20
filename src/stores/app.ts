@@ -14,7 +14,7 @@ export const useAppStore = defineStore('app', () => {
   const notices = ref<Notice[]>([])
   const loading = ref(true)
   const toast = ref('')
-  const currentUser = { name: '김민준', department: 'Product Lab', role: '공간 운영 관리자' }
+  const currentUser = { name: '권용주', department: 'Product Lab', role: '워크플레이스 운영 관리자' }
 
   const today = computed(() => new Date().toISOString().slice(0, 10))
   const todayBookings = computed(() => bookings.value.filter((item) => item.date === today.value && item.status !== 'cancelled'))

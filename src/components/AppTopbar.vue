@@ -1,15 +1,18 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { Bell, Menu, Search, ChevronDown, Moon, Sun } from '@lucide/vue'
+import { Bell, Menu, Search, ChevronDown, LogOut, Moon, Sun, UserRound } from '@lucide/vue'
 import { useAppStore } from '../stores/app'
+import { useAuthStore } from '../stores/auth'
 import { useThemeStore } from '../stores/theme'
 
 defineEmits<{ menu: [] }>()
 const route = useRoute()
 const store = useAppStore()
+const auth = useAuthStore()
 const theme = useThemeStore()
 const showNotices = ref(false)
+const showProfile = ref(false)
 </script>
 
 <template>
@@ -37,10 +40,21 @@ const showNotices = ref(false)
           </button>
         </div></Transition>
       </div>
-      <button class="ml-1 flex items-center gap-2.5 rounded-xl p-1.5 text-left transition hover:bg-white sm:pr-2.5">
-        <span class="grid size-9 place-items-center rounded-xl bg-[#d8e6dc] text-xs font-bold text-forest">민준</span>
-        <span class="hidden md:block"><b class="block text-xs">김민준</b><small class="block text-[10px] text-black/40">Product Lab</small></span><ChevronDown :size="14" class="hidden text-black/35 md:block" />
-      </button>
+      <div class="relative">
+        <button class="ml-1 flex items-center gap-2.5 rounded-xl p-1.5 text-left transition hover:bg-white sm:pr-2.5" :aria-expanded="showProfile" aria-label="사용자 메뉴" @click="showProfile = !showProfile">
+          <span class="grid size-9 place-items-center rounded-xl bg-[#d8e6dc] text-xs font-bold text-forest">용주</span>
+          <span class="hidden md:block"><b class="block text-xs">{{ auth.user?.name }}</b><small class="block text-[10px] text-black/40">{{ auth.user?.department }}</small></span><ChevronDown :size="14" :class="['hidden text-black/35 transition md:block', showProfile ? 'rotate-180' : '']" />
+        </button>
+        <Transition name="fade">
+          <div v-if="showProfile" class="card absolute right-0 top-13 w-56 overflow-hidden p-2 shadow-2xl">
+            <div class="flex items-center gap-3 border-b border-black/6 px-3 py-3">
+              <span class="grid size-9 place-items-center rounded-lg bg-mist text-forest"><UserRound :size="17" /></span>
+              <span class="min-w-0"><b class="block truncate text-xs">{{ auth.user?.name }}</b><small class="block truncate text-[10px] text-black/40">{{ auth.user?.id }}</small></span>
+            </div>
+            <button class="mt-1 flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-left text-xs font-medium text-black/55 transition hover:bg-mist hover:text-ink" @click="auth.logout()"><LogOut :size="16" />로그아웃</button>
+          </div>
+        </Transition>
+      </div>
     </div>
   </header>
 </template>

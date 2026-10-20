@@ -1,24 +1,36 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { RouterView } from 'vue-router'
 import { CheckCircle2 } from '@lucide/vue'
 import AppSidebar from './components/AppSidebar.vue'
 import AppTopbar from './components/AppTopbar.vue'
+import LoginView from './views/LoginView.vue'
 import { useAppStore } from './stores/app'
+import { useAuthStore } from './stores/auth'
 
 const store = useAppStore()
+const auth = useAuthStore()
 const sidebarOpen = ref(false)
 const sidebarCollapsed = ref(localStorage.getItem('seongsu-one-sidebar') === 'collapsed')
+let dataLoaded = false
 
 function toggleSidebar() {
   sidebarCollapsed.value = !sidebarCollapsed.value
   localStorage.setItem('seongsu-one-sidebar', sidebarCollapsed.value ? 'collapsed' : 'expanded')
 }
-onMounted(() => store.load())
+async function loadWorkspace() {
+  if (dataLoaded || !auth.signedIn) return
+  dataLoaded = true
+  await store.load()
+}
+
+watch(() => auth.signedIn, loadWorkspace)
+onMounted(loadWorkspace)
 </script>
 
 <template>
-  <div class="min-h-screen bg-[#f2f3ef]">
+  <LoginView v-if="!auth.signedIn" />
+  <div v-else class="min-h-screen bg-[#f2f3ef]">
     <AppSidebar :open="sidebarOpen" :collapsed="sidebarCollapsed" @close="sidebarOpen = false" @toggle-collapse="toggleSidebar" />
     <div :class="['transition-[padding] duration-300', sidebarCollapsed ? 'lg:pl-[84px]' : 'lg:pl-[264px]']">
       <AppTopbar @menu="sidebarOpen = true" />
