@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
-import { Eye, EyeOff, Leaf, LockKeyhole, Moon, ShieldCheck, Sun, UserRound } from '@lucide/vue'
+import kolonLogo from '../assets/kolon-logo-white.svg'
+import { Eye, EyeOff, LockKeyhole, Moon, ShieldCheck, Sun, UserRound } from '@lucide/vue'
 import { DEFAULT_ACCOUNT, useAuthStore } from '../stores/auth'
 import { useThemeStore } from '../stores/theme'
 
@@ -34,8 +35,7 @@ function submit() {
       <div class="absolute bottom-[18%] right-[12%] size-44 rounded-full bg-emerald-300/5 blur-2xl"></div>
 
       <div class="relative flex items-center gap-3">
-        <span class="grid size-11 place-items-center rounded-xl bg-[#c9dfd0] text-[#123e2f]"><Leaf :size="23" :stroke-width="2.2" /></span>
-        <div><b class="block text-[16px] tracking-[.17em]">SEONGSU ONE</b><small class="mt-0.5 block text-[10px] tracking-[.14em] text-white/42">CONNECTED WORKPLACE</small></div>
+        <img :src="kolonLogo" alt="KOLON INDUSTRIES FnC ORGANIZATION" class="h-auto w-[280px]" width="461" height="72" />
       </div>
 
       <div class="relative max-w-xl">
@@ -56,8 +56,7 @@ function submit() {
 
       <div class="w-full max-w-[440px]">
         <div class="mb-10 flex items-center gap-3 lg:hidden">
-          <span class="grid size-10 place-items-center rounded-xl bg-forest text-white"><Leaf :size="20" /></span>
-          <div><b class="block text-sm tracking-[.14em]">SEONGSU ONE</b><small class="text-[9px] tracking-[.12em] text-black/38">CONNECTED WORKPLACE</small></div>
+          <img :src="kolonLogo" alt="KOLON INDUSTRIES FnC ORGANIZATION" class="h-auto w-[250px] brightness-0 dark:brightness-100" width="461" height="72" />
         </div>
 
         <p class="label">WELCOME BACK</p>

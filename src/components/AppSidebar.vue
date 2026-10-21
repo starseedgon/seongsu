@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
-import { LayoutDashboard, CalendarDays, Coins, ContactRound, RadioTower, ChartNoAxesCombined, Cable, Leaf, Settings, CircleHelp, X, PanelLeftClose, PanelLeftOpen } from '@lucide/vue'
+import kolonLogo from '../assets/kolon-logo-white.svg'
+import { LayoutDashboard, CalendarDays, Coins, ContactRound, RadioTower, ChartNoAxesCombined, Cable, Settings, CircleHelp, X, PanelLeftClose, PanelLeftOpen } from '@lucide/vue'
 
 defineProps<{ open: boolean; collapsed: boolean }>()
 defineEmits<{ close: []; toggleCollapse: [] }>()
@@ -18,10 +19,11 @@ const nav = [
 
 <template>
   <aside :class="['fixed inset-y-0 left-0 z-50 flex w-[264px] flex-col bg-[#0c1d16] text-white transition-[width,transform] duration-300 lg:translate-x-0', collapsed ? 'lg:w-[84px]' : 'lg:w-[264px]', open ? 'translate-x-0' : '-translate-x-full']">
-    <div :class="['flex h-[86px] items-center justify-between', collapsed ? 'px-5 lg:justify-center' : 'px-7']">
-      <RouterLink to="/" class="flex items-center gap-3" @click="$emit('close')">
-        <span class="grid size-10 place-items-center rounded-[14px] bg-[#c9dfd0] text-[#123e2f]"><Leaf :size="21" :stroke-width="2.2" /></span>
-        <span :class="collapsed ? 'lg:hidden' : ''"><b class="block text-[15px] tracking-[.16em]">SEONGSU ONE</b><small class="mt-0.5 block text-[10px] tracking-[.13em] text-white/42">CONNECTED WORKPLACE</small></span>
+    <div :class="['flex h-[86px] items-center justify-between', collapsed ? 'px-5 lg:justify-center' : 'px-5']">
+      <RouterLink to="/" class="block shrink-0" aria-label="KOLON INDUSTRIES FnC ORGANIZATION 홈" @click="$emit('close')">
+        <span :class="['block overflow-hidden', collapsed ? 'w-[208px] lg:w-[24px]' : 'w-[208px]']">
+          <img :src="kolonLogo" alt="KOLON INDUSTRIES FnC ORGANIZATION" class="h-auto w-[208px] max-w-none" width="461" height="72" />
+        </span>
       </RouterLink>
       <button class="rounded-lg p-1 text-white/50 lg:hidden" aria-label="메뉴 닫기" @click="$emit('close')"><X :size="20" /></button>
     </div>
